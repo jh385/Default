@@ -1,0 +1,49 @@
+name: SpaceX Daily Valuation Digest
+
+# Sends the modeled SpaceX daily valuation digest by email.
+# Configure these repository secrets (Settings → Secrets and variables → Actions):
+#   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, DIGEST_FROM, DIGEST_TO
+# For Gmail use smtp.gmail.com:587 with an App Password as SMTP_PASS.
+
+on:
+  schedule:
+    # 13:00 UTC daily (~9am ET / 6am PT). Cron times are UTC.
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Override date (YYYY-MM-DD)"
+        required: false
+      dry_run:
+        description: "Print instead of sending (true/false)"
+        required: false
+        default: "false"
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Send digest
+        working-directory: spacex_valuation
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          DIGEST_FROM: ${{ secrets.DIGEST_FROM }}
+          DIGEST_TO: ${{ secrets.DIGEST_TO }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            ARGS="$ARGS --date ${{ github.event.inputs.date }}"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          python send_digest.py $ARGS

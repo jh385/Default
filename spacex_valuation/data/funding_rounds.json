@@ -1,0 +1,25 @@
+{
+  "company": "SpaceX (Space Exploration Technologies Corp.)",
+  "currency": "USD",
+  "notes": "SpaceX is privately held, so there is no public market price. These anchor points are reported primary funding rounds, employee/investor tender offers, and secondary share sales. A daily valuation is ESTIMATED by log-linear interpolation between the two surrounding anchors. Per-share figures are as reported at the time and are NOT adjusted for the 5-for-1 stock split executed on 2026-05-04.",
+  "anchors": [
+    {"date": "2002-08-01", "valuation_usd": 122000000, "per_share": null, "type": "series_a", "label": "Series A", "source": "https://www.pminsights.com/companies/spacex"},
+    {"date": "2010-12-01", "valuation_usd": 1020000000, "per_share": null, "type": "series_f", "label": "Series F (unicorn)", "source": "https://www.pminsights.com/companies/spacex"},
+    {"date": "2015-01-20", "valuation_usd": 12000000000, "per_share": null, "type": "series_g", "label": "Series G", "source": "https://www.pminsights.com/companies/spacex"},
+    {"date": "2017-11-01", "valuation_usd": 21500000000, "per_share": null, "type": "primary", "label": "2017 raise", "source": "https://www.pminsights.com/companies/spacex"},
+    {"date": "2020-08-01", "valuation_usd": 46080000000, "per_share": null, "type": "series_n", "label": "Series N ($1.9B raise)", "source": "https://www.pminsights.com/companies/spacex"},
+    {"date": "2021-02-01", "valuation_usd": 74000000000, "per_share": null, "type": "primary", "label": "Feb 2021 ($850M raise)", "source": "https://www.pminsights.com/companies/spacex"},
+    {"date": "2021-10-01", "valuation_usd": 100300000000, "per_share": null, "type": "tender", "label": "Oct 2021 tender", "source": "https://augustuswealth.com/blog/what-know-about-space-x-valuation/"},
+    {"date": "2022-07-01", "valuation_usd": 127000000000, "per_share": null, "type": "tender", "label": "Jul 2022 tender", "source": "https://augustuswealth.com/blog/what-know-about-space-x-valuation/"},
+    {"date": "2023-12-01", "valuation_usd": 180000000000, "per_share": null, "type": "tender", "label": "Dec 2023 tender", "source": "https://techcrunch.com/2025/01/01/internal-spacex-documents-show-the-sweet-stock-deals-offered-to-investors-like-a16z-gigafund/"},
+    {"date": "2024-06-01", "valuation_usd": 210000000000, "per_share": 112.0, "type": "tender", "label": "Jun 2024 tender", "source": "https://techcrunch.com/2025/01/01/internal-spacex-documents-show-the-sweet-stock-deals-offered-to-investors-like-a16z-gigafund/"},
+    {"date": "2024-12-01", "valuation_usd": 350000000000, "per_share": 185.0, "type": "secondary", "label": "Dec 2024 secondary ($1.25B sale)", "source": "https://www.bloomberg.com/news/articles/2024-12-02/spacex-discusses-tender-offer-at-roughly-350-billion-valuation"},
+    {"date": "2025-07-01", "valuation_usd": 400000000000, "per_share": 212.0, "type": "tender", "label": "Jul 2025 tender", "source": "https://fortune.com/2025/12/13/spacex-ipo-plan-2026-secondary-offering-insider-share-sale-800-billion-valuation/"},
+    {"date": "2025-12-13", "valuation_usd": 800000000000, "per_share": 421.0, "type": "tender", "label": "Dec 2025 tender (most valuable private co.)", "source": "https://fortune.com/2025/12/13/spacex-ipo-plan-2026-secondary-offering-insider-share-sale-800-billion-valuation/"},
+    {"date": "2026-06-12", "valuation_usd": 1750000000000, "per_share": null, "type": "ipo_target", "label": "Expected IPO valuation target", "projected": true, "source": "https://stansberryresearch.com/stock-market-trends/spacex-ipo-this-rocket-company-aims-for-one-of-the-largest-ipos-ever"}
+  ],
+  "events": [
+    {"date": "2026-02-01", "label": "xAI merger discussions value combined entity at ~$1.25T (combined, not standalone SpaceX)"},
+    {"date": "2026-05-04", "label": "5-for-1 stock split executed"}
+  ]
+}
