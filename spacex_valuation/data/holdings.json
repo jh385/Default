@@ -1,0 +1,5 @@
+{
+  "comment": "Your SpaceX position. 'shares' is treated as your CURRENT share count (post the 2026-05-04 5-for-1 split). If your 2480 figure is a PRE-split count, the post-split equivalent is 12400 — update this number accordingly.",
+  "shares": 2480,
+  "cost_basis_per_share": null
+}

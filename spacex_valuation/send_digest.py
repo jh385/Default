@@ -31,7 +31,7 @@ from datetime import date
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from valuation import _parse, build_digest, load_data, render_html, render_text
+from valuation import _parse, build_digest, load_data, load_holdings, render_html, render_text
 
 
 def build_message(digest: dict, sender: str, recipients: list[str]) -> MIMEMultipart:
@@ -72,7 +72,9 @@ def main() -> int:
     args = parser.parse_args()
 
     target = _parse(args.date) if args.date else date.today()
-    digest = build_digest(target, load_data())
+    holdings = load_holdings()
+    shares = holdings.get("shares") if holdings else None
+    digest = build_digest(target, load_data(), shares=shares)
 
     sender = os.environ.get("DIGEST_FROM") or os.environ.get("SMTP_USER") or "spacex-valuation@localhost"
     recipients = [r.strip() for r in os.environ.get("DIGEST_TO", "").split(",") if r.strip()]

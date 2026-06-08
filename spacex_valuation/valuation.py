@@ -27,9 +27,17 @@ from datetime import date, datetime, timedelta
 from typing import Optional
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "funding_rounds.json")
+HOLDINGS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "holdings.json")
 
 
 def load_data(path: str = DATA_PATH) -> dict:
+    with open(path, "r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def load_holdings(path: str = HOLDINGS_PATH) -> Optional[dict]:
+    if not os.path.exists(path):
+        return None
     with open(path, "r", encoding="utf-8") as fh:
         return json.load(fh)
 
@@ -110,6 +118,44 @@ def daily_change(target: date, data: dict) -> Optional[float]:
     return (today_v - prev_v) / prev_v
 
 
+def latest_firm_mark(target: date, data: dict) -> Optional[dict]:
+    """Most recent anchor on/before ``target`` that has an actual (non-projected)
+    reported per-share price — the best market-set per-share mark available."""
+    candidates = [
+        a for a in data["anchors"]
+        if a.get("per_share") and not a.get("projected") and _parse(a["date"]) <= target
+    ]
+    return max(candidates, key=lambda a: a["date"]) if candidates else None
+
+
+def per_share_estimate(target: date, data: dict) -> Optional[float]:
+    """Model per-share value: interpolated total valuation / implied shares
+    outstanding. ``None`` if shares outstanding is unknown."""
+    shares = data.get("shares_outstanding_estimate")
+    if not shares:
+        return None
+    total = estimate_valuation(target, data)["valuation_usd"]
+    return total / shares
+
+
+def position(shares: float, target: date, data: dict) -> dict:
+    """Mark a holding of ``shares`` to the current best estimates.
+
+    Returns both a firm mark (latest reported market per-share price) and the
+    model mark (interpolated total / implied shares outstanding)."""
+    firm = latest_firm_mark(target, data)
+    firm_ps = float(firm["per_share"]) if firm else None
+    model_ps = per_share_estimate(target, data)
+    return {
+        "shares": shares,
+        "firm_per_share": firm_ps,
+        "firm_source": firm,
+        "firm_value": shares * firm_ps if firm_ps is not None else None,
+        "model_per_share": model_ps,
+        "model_value": shares * model_ps if model_ps is not None else None,
+    }
+
+
 def fmt_usd(value: float) -> str:
     """Human-friendly large-dollar formatting ($1.75T, $350.0B, $122M)."""
     abs_v = abs(value)
@@ -128,7 +174,7 @@ def _pct(frac: Optional[float]) -> str:
     return f"{frac * 100:+.4f}%"
 
 
-def build_digest(target: date, data: dict) -> dict:
+def build_digest(target: date, data: dict, shares: Optional[float] = None) -> dict:
     est = estimate_valuation(target, data)
     change = daily_change(target, data)
     anchors = sorted(data["anchors"], key=lambda a: a["date"])
@@ -136,7 +182,11 @@ def build_digest(target: date, data: dict) -> dict:
     # Recent anchor history (last 6) for context.
     recent = anchors[-6:]
 
+    pos = position(shares, target, data) if shares else None
+
     subject = f"SpaceX Daily Valuation — {target.strftime('%b %-d, %Y')}: ~{fmt_usd(est['valuation_usd'])}"
+    if pos and pos["firm_value"] is not None:
+        subject += f" | your {shares:g} sh ≈ {fmt_usd(pos['firm_value'])}"
     return {
         "subject": subject,
         "estimate": est,
@@ -144,6 +194,7 @@ def build_digest(target: date, data: dict) -> dict:
         "recent_anchors": recent,
         "events": data.get("events", []),
         "target": target,
+        "position": pos,
     }
 
 
@@ -159,6 +210,24 @@ def render_text(digest: dict) -> str:
     if est.get("annualized_growth") is not None:
         lines.append(f"Implied annualized growth between anchors: {est['annualized_growth'] * 100:.1f}%")
     lines.append("")
+
+    pos = digest.get("position")
+    if pos:
+        lines.append(f"YOUR POSITION — {pos['shares']:g} shares")
+        if pos["firm_value"] is not None:
+            src = pos["firm_source"]
+            lines.append(
+                f"  Firm mark:  {pos['shares']:g} × ${pos['firm_per_share']:,.2f}/sh = {fmt_usd(pos['firm_value'])}"
+                f"  ({pos['firm_value']:,.0f} USD)"
+            )
+            lines.append(f"              based on {src['label']} ({src['date']})")
+        if pos["model_value"] is not None:
+            lines.append(
+                f"  Model mark: {pos['shares']:g} × ${pos['model_per_share']:,.2f}/sh = {fmt_usd(pos['model_value'])}"
+                f"  ({pos['model_value']:,.0f} USD)"
+            )
+            lines.append("              interpolated total valuation / implied shares outstanding")
+        lines.append("")
 
     lo, hi = est.get("lower_anchor"), est.get("upper_anchor")
     lines.append("Bracketing anchors:")
@@ -211,6 +280,25 @@ def render_html(digest: dict) -> str:
     if est.get("annualized_growth") is not None:
         ann = f"<p style='margin:4px 0;color:#555'>Implied annualized growth between anchors: <b>{est['annualized_growth']*100:.1f}%</b></p>"
 
+    pos = digest.get("position")
+    pos_html = ""
+    if pos and pos["firm_value"] is not None:
+        src = pos["firm_source"]
+        model_line = ""
+        if pos["model_value"] is not None:
+            model_line = (
+                f"<div style='margin-top:6px;color:#c3cad6;font-size:13px'>Model mark "
+                f"(interpolated): {pos['shares']:g} × ${pos['model_per_share']:,.2f} = "
+                f"<b style='color:#fff'>{fmt_usd(pos['model_value'])}</b></div>"
+            )
+        pos_html = f"""
+    <div style="background:#10243a;color:#fff;padding:18px 28px;border-top:1px solid #1f3a59">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#7fa8d4">Your position — {pos['shares']:g} shares</div>
+      <div style="font-size:30px;font-weight:800;margin-top:6px;line-height:1">{fmt_usd(pos['firm_value'])}</div>
+      <div style="margin-top:4px;color:#c3cad6;font-size:13px">Firm mark: {pos['shares']:g} × ${pos['firm_per_share']:,.2f}/sh &nbsp;·&nbsp; {src['label']} ({src['date']})</div>
+      {model_line}
+    </div>"""
+
     return f"""<!DOCTYPE html>
 <html><body style="margin:0;background:#f3f4f6;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111">
   <div style="max-width:640px;margin:0 auto;padding:24px">
@@ -219,7 +307,7 @@ def render_html(digest: dict) -> str:
       <div style="font-size:15px;color:#c3cad6;margin-top:4px">{digest['target'].strftime('%A, %B %-d, %Y')}</div>
       <div style="font-size:46px;font-weight:800;margin-top:14px;line-height:1">~{fmt_usd(est['valuation_usd'])}</div>
       <div style="margin-top:8px;font-size:16px;color:{change_color};font-weight:700">{_pct(change)} <span style="color:#8b95a7;font-weight:400">day over day</span></div>
-    </div>
+    </div>{pos_html}
     <div style="background:#fff;border-radius:0 0 14px 14px;padding:20px 28px;box-shadow:0 1px 3px rgba(0,0,0,.08)">
       <p style="margin:4px 0;color:#555">Method: <b>{est['method']}</b></p>
       {ann}
@@ -248,18 +336,28 @@ def main() -> None:
     parser.add_argument("--date", help="target date YYYY-MM-DD (default: today)")
     parser.add_argument("--format", choices=["text", "html"], default="text")
     parser.add_argument("--json", action="store_true", help="emit machine-readable JSON")
+    parser.add_argument("--shares", type=float, help="mark a holding of N shares (default: data/holdings.json)")
+    parser.add_argument("--no-holdings", action="store_true", help="ignore data/holdings.json")
     args = parser.parse_args()
 
     target = _parse(args.date) if args.date else date.today()
     data = load_data()
 
+    shares = args.shares
+    if shares is None and not args.no_holdings:
+        h = load_holdings()
+        if h:
+            shares = h.get("shares")
+
     if args.json:
         est = estimate_valuation(target, data)
         est["daily_change"] = daily_change(target, data)
+        if shares:
+            est["position"] = position(shares, target, data)
         print(json.dumps(est, indent=2, default=str))
         return
 
-    digest = build_digest(target, data)
+    digest = build_digest(target, data, shares=shares)
     print(render_html(digest) if args.format == "html" else render_text(digest))
 
 
