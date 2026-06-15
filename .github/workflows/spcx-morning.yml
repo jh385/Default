@@ -1,0 +1,95 @@
+name: SPCX Morning Update
+
+# Runs the adaptive SPCX morning analysis defined at
+# .claude/commands/spcx-morning.md and commits the report to reports/spcx/.
+#
+# Required repository secret:
+#   ANTHROPIC_API_KEY  - your Anthropic API key
+#
+# Notes on timing:
+#   Cron in GitHub Actions is UTC and does NOT auto-adjust for DST.
+#   12:00 UTC = 08:00 ET in EDT (Mar-Nov), 07:00 ET in EST (Nov-Mar).
+#   Adjust if you'd rather be exact at 8am ET year-round.
+
+on:
+  schedule:
+    - cron: "0 12 * * 1-5"   # 12:00 UTC, Mon-Fri
+  workflow_dispatch:
+    inputs:
+      force_mode:
+        description: "Force mode (quick / full / auto)"
+        required: false
+        default: "auto"
+
+permissions:
+  contents: write  # for committing the dated report back to the repo
+
+jobs:
+  spcx-morning:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node (for Claude Code CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run /spcx-morning
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FORCE_MODE: ${{ github.event.inputs.force_mode || 'auto' }}
+        run: |
+          set -euo pipefail
+          PROMPT="/spcx-morning"
+          if [ "${FORCE_MODE}" = "quick" ]; then
+            PROMPT="/spcx-morning (force QUICK mode regardless of triggers)"
+          elif [ "${FORCE_MODE}" = "full" ]; then
+            PROMPT="/spcx-morning (force FULL mode regardless of triggers)"
+          fi
+          # --print runs non-interactively and exits when the model finishes.
+          # --permission-mode acceptEdits lets the routine write the report file.
+          claude --print --permission-mode acceptEdits "$PROMPT"
+
+      - name: Commit report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TODAY=$(date -u +"%Y-%m-%d")
+          REPORT="reports/spcx/${TODAY}.md"
+          if [ ! -f "$REPORT" ]; then
+            echo "::warning::No report produced at $REPORT — the routine may have failed."
+            exit 0
+          fi
+          git config user.name  "spcx-morning-bot"
+          git config user.email "spcx-morning-bot@users.noreply.github.com"
+          git add "$REPORT"
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "SPCX morning update — ${TODAY}"
+          # Retry push on transient network failures (per repo instructions).
+          for delay in 2 4 8 16; do
+            if git push origin HEAD; then
+              exit 0
+            fi
+            echo "push failed; sleeping ${delay}s before retry"
+            sleep "$delay"
+          done
+          git push origin HEAD
+
+      - name: Upload report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spcx-morning-${{ github.run_id }}
+          path: reports/spcx/
+          if-no-files-found: warn
+          retention-days: 30
