@@ -2,8 +2,8 @@
   "company": "SpaceX (Space Exploration Technologies Corp.)",
   "currency": "USD",
   "notes": "SpaceX is privately held through its 2026-06-12 IPO. These anchor points are reported primary funding rounds, employee/investor tender offers, secondary share sales, and (from 2026-06-03) the firm IPO price. A daily valuation is ESTIMATED by log-linear interpolation between the two surrounding anchors. Pre-2026-05-04 per-share figures are as reported at the time and are NOT adjusted for the 5-for-1 stock split executed on that date; the IPO price of $135 is post-split.",
-  "shares_outstanding_estimate": 13111111111,
-  "shares_outstanding_basis": "Implied by the firm IPO: $1.77T valuation / $135.00 per share. Post the 2026-05-04 5-for-1 split. Used to convert a total-valuation estimate into a per-share mark.",
+  "shares_outstanding_estimate": 13159000000,
+  "shares_outstanding_basis": "~13.076B Class A+B implied by the firm IPO ($1.77T / $135.00) plus the 83.3M-share greenshoe exercised 2026-06-15. Post the 2026-05-04 5-for-1 split. Used to convert a total-valuation estimate into a per-share mark.",
   "anchors": [
     {"date": "2002-08-01", "valuation_usd": 122000000, "per_share": null, "type": "series_a", "label": "Series A", "source": "https://www.pminsights.com/companies/spacex"},
     {"date": "2010-12-01", "valuation_usd": 1020000000, "per_share": null, "type": "series_f", "label": "Series F (unicorn)", "source": "https://www.pminsights.com/companies/spacex"},
@@ -19,12 +19,16 @@
     {"date": "2025-07-01", "valuation_usd": 400000000000, "per_share": 212.0, "type": "tender", "label": "Jul 2025 tender", "source": "https://fortune.com/2025/12/13/spacex-ipo-plan-2026-secondary-offering-insider-share-sale-800-billion-valuation/"},
     {"date": "2025-12-13", "valuation_usd": 800000000000, "per_share": 421.0, "type": "tender", "label": "Dec 2025 tender (most valuable private co.)", "source": "https://fortune.com/2025/12/13/spacex-ipo-plan-2026-secondary-offering-insider-share-sale-800-billion-valuation/"},
     {"date": "2026-06-03", "valuation_usd": 1770000000000, "per_share": 135.0, "type": "ipo_priced", "label": "IPO priced — $135/sh, $1.77T (Nasdaq: SPCX)", "source": "https://fortune.com/2026/06/03/spacex-ipo-share-price-index-funds-valuation-public/"},
-    {"date": "2026-06-12", "valuation_usd": 1770000000000, "per_share": 135.0, "type": "ipo_listing", "label": "Expected Nasdaq listing day (SPCX)", "projected": true, "source": "https://www.cnbc.com/2026/06/03/spacex-ipo-stock-price-roadshow-musk.html"}
+    {"date": "2026-06-12", "valuation_usd": 1770000000000, "per_share": 135.0, "type": "ipo_listing", "label": "Expected Nasdaq listing day (SPCX)", "projected": true, "source": "https://www.cnbc.com/2026/06/03/spacex-ipo-stock-price-roadshow-musk.html"},
+    {"date": "2026-08-05", "valuation_usd": 1424700000000, "per_share": 108.27, "type": "market_close", "label": "All-time closing low after Q2'26 capex shock (-20% vs IPO)", "source": "https://finance.yahoo.com/markets/stocks/article/spacex-stock-hits-new-closing-low-in-rocky-week-ahead-of-earnings-134523324.html"}
   ],
   "events": [
     {"date": "2026-02-01", "label": "xAI merger discussions value combined entity at ~$1.25T (combined, not standalone SpaceX)"},
     {"date": "2026-05-04", "label": "5-for-1 stock split executed"},
     {"date": "2026-06-03", "label": "IPO priced: 555.6M shares at $135 ($75B raise); Nasdaq debut June 12 under SPCX; Musk retains >82% voting control"},
-    {"date": "2026-06-03", "label": "Bear case: Morningstar values SpaceX at ~$780B (~48% below the IPO valuation), citing xAI as a 'material threat of value destruction'"}
+    {"date": "2026-06-03", "label": "Bear case: Morningstar values SpaceX at ~$780B (~48% below the IPO valuation), citing xAI as a 'material threat of value destruction'"},
+    {"date": "2026-06-15", "label": "Greenshoe exercised in full (+83.3M shares); total raise ~$85.7B, float ~638.9M (~4.9%)"},
+    {"date": "2026-08-04", "label": "First earnings (Q2'26): revenue $7.81B (+92% YoY, beat), net loss $541M (narrowed), Starlink subs 12.0M; capex $18.37B ($15.83B AI) spooked the market; cash $93.5B"},
+    {"date": "2026-08-06", "label": "First lockup release: 911.5M shares eligible, float 4.9% -> ~11.8%; conditional +455.8M tranche NOT triggered (needed >=$175.50); Musk locked until mid-2027. Stock reversed off $105.11 low on exclusive Nvidia Vera Rubin AI-infrastructure partnership"}
   ]
 }

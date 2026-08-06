@@ -4,6 +4,33 @@
 **Anchor mapping:** SPCX IPO 2026-06-12 ↔ TSLA IPO 2010-06-29, so calendar 2036 = Tesla's calendar 2020 (IPO +9.5 to +10.5 years).
 All inputs below were independently fact-checked (24/24 load-bearing claims confirmed against SEC filings, Tesla IR, CNBC/Bloomberg and market data), and the report's arithmetic was adversarially re-derived end-to-end.
 
+## Update — 2026-08-06 (post-Q2 earnings, lockup day)
+
+The tape since the July 15 report, and what it changes:
+
+- **The tape:** SPCX fell to an all-time closing low of **$108.27 on Aug 5** (-19.8% vs the $135 IPO, -52% from the June 16 $225.64 peak; intraday low $104.83), the last leg a >13% post-earnings drop. Today (Aug 6), the **first lockup released 911.5M shares** (float 4.9% → ~11.8%; the conditional +455.8M tranche did NOT trigger — it needed ≥$175.50; Musk stays locked until mid-2027) — yet the stock reversed off a $105.11 low and finished **up ~3–5% (~$111–114; end-of-day vendor prints conflicted)** after Musk announced SpaceX will build its terrestrial and orbital AI infrastructure exclusively on Nvidia's Vera Rubin architecture. Market cap ~$1.42–1.49T — now roughly *at* Tesla's, no longer above it.
+- **Q2 (first-ever) earnings, Aug 4:** revenue **$7.81B, +92% YoY** (beat vs $6.93B expected); net loss narrowed to $541M (-$0.09/sh vs -$0.26 expected); Starlink subs 12.0M (2x YoY); **capex $18.37B in the quarter, $15.83B of it AI** — the number that broke the stock; cash $93.5B. Company projects a **$100B annualized revenue run-rate by end-2026** and pulled the internal $1T-revenue target forward to 2030.
+- **Tesla-track check (day ~55):** Tesla at the same age had also broken its IPO price ($14.98, -12%, July 2010) but was back around ~$20 (+15%) after its own first post-IPO earnings loss. At 0.80x IPO, SPCX is running **~25–30% below the Tesla script** — though the script puts almost no weight on year one (Tesla's decade was backloaded into 2019–2020), so this is noise for the 2036 endpoints, which are anchored to the IPO price by construction.
+- **Scenario revisions:** **A (literal track) endpoints unchanged** — mid-2036 ~$8,015, end-2036 ~$28,019 — still economically impossible. **C (stage-matched) drops from ~$185 to ~$150**: compounding today's $108–114 at Tesla's post-$1T 3.2%/yr for the remaining 9.85 years gives $148–155. **D ceilings unchanged in cap terms** ($10–18T → $750–1,350 on today's count, $365–655 with Tesla-like dilution), but they now require 21–29%/yr from today's lower base. **E (fundamentals) is the interesting shift:** the sell-off plus 92% growth compressed the multiple from 95x sales at IPO to ~78x trailing / ~46x annualized-Q2 — and if the company's own $100B run-rate claim lands, today's ~$1.45T is ~15x forward run-rate, i.e. Tesla's mature multiple. The stock is growing into its valuation the fast, painful way: price down, revenue up. Counterweight: $18B/quarter capex against $93.5B cash makes future equity raises — the dilution column — more likely, not less.
+
+| Mark (2036 unless noted) | $/share | 1,900 shares* |
+|---|---|---|
+| Aug 5 close (all-time low) | $108.27 | $205,713 |
+| Today's rebound level | ~$111–114 | ~$211K–216K |
+| Stage-matched (C, revised) | **~$150** | **~$285K** |
+| Scale-honest band (D/E), Tesla-like dilution | $365–655 | $694K–1.24M |
+| Scale-honest band (D/E), today's share count | $750–1,350 | $1.43M–2.57M |
+| Literal track, mid-2036 (A) | ~$8,015 | ~$15.2M |
+| Literal track, end-2036 (A) | ~$28,019 | ~$53.2M |
+
+*Position marks now use the holder's stated 1,900 shares (previously 2,480 per `data/holdings.json`, which has not been changed).
+
+Update sources: [Yahoo — new closing low ahead of earnings](https://finance.yahoo.com/markets/stocks/article/spacex-stock-hits-new-closing-low-in-rocky-week-ahead-of-earnings-134523324.html) · [CNBC — Q2 2026 earnings live updates](https://www.cnbc.com/2026/08/04/spacex-spcx-earnings-live-updates-q2-2026.html) · [Motley Fool — 911.5M-share Aug 6 unlock](https://www.fool.com/investing/2026/08/05/spacexs-lockup-expires-on-aug-6-heres-why-9115-mil/) · [Yahoo — lockup expires, stock bucking higher](https://ca.finance.yahoo.com/news/spacex-lockup-expires-today-with-stock-bucking-higher-100000039.html) · [TradingKey — Aug 6 close +4.83%](https://www.tradingkey.com/news/market-movers/262084964-market-movers-spcx-20260806) · [FXLeaders — Nvidia partnership lifts sentiment](https://www.fxleaders.com/news/2026/08/06/spacex-spcx-stock-attempts-to-reverse-downtrend-ahead-of-lockup-expiry-as-nvidia-partnership-lifts-sentiment/)
+
+---
+
+*Original analysis (2026-07-15) follows; its 2036 scenario framework is unchanged.*
+
 ## TL;DR — the answer is a ladder, and it depends what "tracks like Tesla" means
 
 | Interpretation | SPCX/share in 2036 | Implied market cap | Your 2,480 sh |
