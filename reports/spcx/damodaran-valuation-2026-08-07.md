@@ -15,6 +15,8 @@
 
 **Reverse DCF:** today's ~$111 requires ~148% year-1 growth decaying to 4%, i.e. **2030 revenue ~$368B** (right between Morgan Stanley's $330B and Goldman's $474B street-high forecasts) **and 2036 revenue ~$780B at 28% mature margins with 15% terminal ROIC.** The market is not pricing the base case; it is pricing the street's most aggressive published path, roughly 60% of the way to Musk's own claims.
 
+**Cross-check against Damodaran's actual model (§6):** his own June workbook values SPCX at **$97.83/share** ($1.30T equity); re-run with the Q2 actuals it yields **~$91** (range $91–106 across variants). The stock at ~$111, which IPO'd 38% above his value, now trades within ~10–20% of Damodaran-fair. The gap between his ~$91 and this report's $42 is almost entirely his terminal margin structure (38% blended vs 24% here).
+
 ## 1. The story (Damodaran step one: what kind of company is this?)
 
 SpaceX is three businesses wearing one ticker, per its own S-1 segments (FY2025: $18.7B revenue, recast to include xAI/X):
@@ -81,6 +83,36 @@ The DCF reframes the ladder rather than replacing it. If intrinsic value today i
 | Intrinsic, Musk case | $316 | $601K |
 
 Read plainly: at ~$111 the market currently pays ~2.6x the weighted intrinsic value of the position — which is either a gift (if you believe the model) or a discount (if you believe Musk's revenue path). The honest statement is that **$111 is only cheap in the one scenario where the company's own forecasts come true.**
+
+## 6. Damodaran's actual valuation — checked against Q2 (added 2026-08-07)
+
+Damodaran has published two SPCX pieces on Musings on Markets: ["To a Trillion(s) Dollars and beyond: A SpaceX IPO Odyssey!"](https://aswathdamodaran.blogspot.com/2026/04/to-trillion-dollars-and-beyond-spacex.html) (April) and ["Revisiting the SpaceX Valuation: A Post-Prospectus Update!"](https://aswathdamodaran.blogspot.com/2026/06/a-weeks-ago-i-assessed-value-of-spacex.html) (June, also [on Substack](https://aswathdamodaran.substack.com/p/revisiting-the-spacex-valuation-a)). This section works from **his actual June valuation workbook** (`SpaceX2026IPOUpdated.xlsx`, valuation date 2026-06-01, archived in this repo at [`spacex_valuation/models/`](../../spacex_valuation/models/)), ported line-for-line to [`damodaran_blog_update.py`](../../spacex_valuation/damodaran_blog_update.py) — the port reproduces his published output to within $0.03/share.
+
+**His actual June model:** four segments with 2036 revenue targets — **Launch $40B / Starlink $120B / xAI $160B / "Other" $100B** (the Other segment is a pure optionality bet that ramps $0 → $100B in years 6–10) — total **$420B year-10 revenue at a 38.1% blended operating margin** (targets: Launch 45%, Starlink 60%, xAI 25%, Other 30%, converging linearly by year 10 from post-R&D-capitalization base margins). Sales-to-capital: Launch 3→4, Starlink 3→5, xAI 1.5→2.5, Other 5. Tax 10% effective stepping to 25% marginal; cost of capital 8.37%→8.25%; terminal growth = riskfree 4.56%; terminal ROIC 15% (override). Bridge: operating assets **$1,224B** − book debt $22.9B + cash $24.7B + $75B IPO proceeds (with new shares issued at *intrinsic* value — his workbook's iterative step) → equity **$1,301B** on 13,302M shares = **$97.83/share** vs the $135 offer ("price at 138% of value"). His story caveats: the S-1's $26T AI TAM is "reaching the end of what's plausible"; the gap to the IPO price is "one isolated bet on xAI compute"; his number is "a relative, disciplined estimate, not a price target."
+
+**The Q2 check** — where the Aug 4 print confirms or breaks his actual inputs:
+
+| His June assumption | Q2 2026 actual | Verdict → revision |
+|---|---|---|
+| Year-1 (2026) revenue $38.8B (Launch $6.5B / Starlink $18.6B / xAI $13.7B) | Run-rate ~$31B (Launch ~$3.8B, Starlink ~$17.2B, xAI ~$10.4B annualized) | **Behind his path** overall — though Q2 beat the street, and the company's $100B exit-run-rate claim would leapfrog it. Bases re-anchored to TTM |
+| Launch to $40B by 2036 (~26%/yr) | ~$0.92B in Q2, roughly **flat** YoY | Behind → target trimmed to $30B |
+| Starlink to $120B, 60% margin | +66% revenue, segment income +79%, subs 2x | On/ahead of track → held (his $120B needs only 24%/yr from the TTM base) |
+| xAI to $160B, 25% margin | $2.6B, **+247%** YoY | Ramp ahead → base raised; **target held** (his TAM skepticism concerns the endpoint, not the slope) |
+| Year-1 reinvestment **$10.2B** (S2C: xAI 1.5, Starlink 3) | **$18.4B capex in Q2 alone** ($15.8B AI) — actual reinvestment ~5x his path | The big break → xAI S2C cut 1.5/2.5 → 0.6/1.5, Starlink 3/5 → 2/4 |
+| Year-1 EBIT +$3.3B (margin ramp) | GAAP op loss narrowing (net −$541M) but still negative | Slightly behind; margin *schedules* held (his base margins are R&D-adjusted; 2025 adj. EBITDA was +$6.6B) |
+| Cash $24.7B + $75B proceeds; 13,302M shares (issued at intrinsic $97.83) | Cash $93.5B actual; 13,159M shares — the deal priced at $135, **above** his intrinsic value | Actuals swapped in; selling stock above intrinsic value was accretive (fewer shares than he modeled) |
+
+**Result: the Q2-updated value in his own framework is $91.23/share (equity ~$1.20T), −6.7% vs his June $97.83.** Decomposition: the capex/sales-to-capital shock alone is worth **−$4.86** (running Q2 bases with *his* original S2C gives $96.09); the launch trim and balance-sheet actuals account for the rest; Starlink's faster base partially offsets. Upside variant (Starlink $150B, xAI $200B on Q2 momentum, capex cut retained): **$106.06**. So his framework post-Q2 brackets **$91–106** — the stock at ~$111, which IPO'd 38% *above* Damodaran-fair, has round-tripped to within ~5–20% of it. On his stated discipline (buy below value), SPCX first became arguable at the Aug 5 low of $105–108.
+
+**Why his ~$91 vs this report's $42 weighted:** the margin lever, full stop. His terminal structure — $420B revenue at 38.1% blended operating margin, with year-10 ROIC of **64%** on his sales-to-capital assumptions — prices SpaceX's mature state like scaled software infrastructure; this report's base (24% margin, 12% terminal ROIC) prices it like an excellent industrial. His June year-1 reinvestment of $10.2B against Q2's actual $18.4B *per quarter* is the live test of which world we're in: if capex normalizes toward his path by 2028, his number wins; if $60–70B/yr persists, even $91 is generous. In the §2 scenario grid, his inputs sit squarely between Bull and Musk.
+
+| Mark | $/share | 1,900 shares |
+|---|---|---|
+| This report, weighted intrinsic | $42 | $80K |
+| **Damodaran, Q2-updated (his workbook, his levers)** | **$91** | **$173K** |
+| Damodaran June (his workbook output) | $97.83 | $186K |
+| Damodaran Q2 upside variant | $106 | $202K |
+| Market (Aug 6) | ~$111 | ~$211K |
 
 ## Sources
 
